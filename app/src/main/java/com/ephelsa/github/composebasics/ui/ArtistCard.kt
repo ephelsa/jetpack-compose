@@ -59,7 +59,7 @@ fun ArtistCard(
                 ) {
                     val typography = MaterialTheme.typography
                     Text(
-                        text = artist.name,
+                        text = artist.name.toUpperCase(),
                         style = typography.h6,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
