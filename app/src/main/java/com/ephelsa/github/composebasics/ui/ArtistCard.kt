@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import com.ephelsa.github.composebasics.R
 import com.ephelsa.github.composebasics.model.Artist
+import java.util.*
 
 
 private const val TAG = "ArtistCardPreview"

@@ -35,5 +35,5 @@ fun Header(
 @Preview
 @Composable
 fun PreviewHeader() {
-    Header(title = "Top Artist List")
+    Header(title = "Artist List")
 }
