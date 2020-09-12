@@ -6,7 +6,6 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,47 +32,44 @@ fun ArtistCard(
     artist: Artist,
     onClick: (Artist) -> Unit
 ) {
-    MaterialTheme {
-        Card(
-            elevation = 4.dp,
-            shape = RoundedCornerShape(2.dp),
+    Card(
+        elevation = 0.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick(artist) })
+    ) {
+        Row(
+            verticalGravity = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = { onClick(artist) })
+                .padding(16.dp)
         ) {
-            Row(
-                verticalGravity = Alignment.CenterVertically,
+            Image(
+                asset = imageResource(id = artist.imageResource),
                 modifier = Modifier
-                    .padding(16.dp)
+                    .preferredSize(80.dp, 80.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+            Column(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
             ) {
-                Image(
-                    asset = imageResource(id = artist.imageResource),
-                    modifier = Modifier
-                        .preferredSize(80.dp, 80.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                val typography = MaterialTheme.typography
+                Text(
+                    text = artist.name.toUpperCase(),
+                    style = typography.h6,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                Column(
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                ) {
-                    val typography = MaterialTheme.typography
-                    Text(
-                        text = artist.name.toUpperCase(),
-                        style = typography.h6,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                Text(
+                    text = artist.gender,
+                    style = TextStyle(
+                        color = Color.Gray,
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = typography.subtitle1.fontSize
                     )
-                    Text(
-                        text = artist.gender,
-                        style = TextStyle(
-                            color = Color.Gray,
-                            fontStyle = FontStyle.Italic,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = typography.subtitle1.fontSize
-                        )
-                    )
-                }
+                )
             }
         }
     }

@@ -3,9 +3,15 @@ package com.ephelsa.github.composebasics
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.unit.dp
 import com.ephelsa.github.composebasics.model.Artist
 import com.ephelsa.github.composebasics.ui.ArtistsList
+import com.ephelsa.github.composebasics.ui.Header
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +24,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ArtistsList(artistsList = artists, onSelected = ::displayArtistPhrase)
+            MaterialTheme {
+                Column {
+                    Header(title = "Artist List")
+                    ArtistsList(artistsList = artists, onSelected = ::displayArtistPhrase)
+                }
+            }
         }
     }
 
