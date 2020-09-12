@@ -1,40 +1,50 @@
 package com.ephelsa.github.composebasics
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
-import com.ephelsa.github.composebasics.model.Artist
-import com.ephelsa.github.composebasics.ui.ArtistsList
-import com.ephelsa.github.composebasics.ui.Header
 
 class MainActivity : AppCompatActivity() {
 
-    private val artists = listOf<Artist>(
-        Artist(R.drawable.shakira, "Shakira", "Pop", "Waka, Waka, Eh, eh...!"),
-        Artist(R.drawable.mercury, "Freddie Mercury", "Rock", "Eooooooooo!"),
-        Artist(R.drawable.avicii, "Avicii", "Electronic", "Wake me up")
-    )
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                Column {
-                    Header(title = "Artist List")
-                    ArtistsList(artistsList = artists, onSelected = ::displayArtistPhrase)
-                }
+            Column {
+                ClickCounterStateful()
+                Spacer(modifier = Modifier.height(20.dp))
+                ClickCounterStateful()
             }
         }
     }
+}
 
-
-    private fun displayArtistPhrase(artist: Artist) {
-        Toast.makeText(this, "${artist.name}: ${artist.phrase}", Toast.LENGTH_SHORT).show()
+@Composable
+fun ClickCounter(clicks: Int, onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("I've been clicked $clicks times")
     }
+}
+
+@Composable
+fun ClickCounterStateful() {
+    val counterState = remember { mutableStateOf(0) }
+
+    ClickCounter(
+        clicks = counterState.value,
+        onClick = { counterState.value += 1 }
+    )
 }
