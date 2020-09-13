@@ -1,23 +1,24 @@
 package com.ephelsa.github.composebasics
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.ephelsa.github.composebasics.theme.*
+import com.ephelsa.github.composebasics.widget.ColorSelector
+import com.ephelsa.github.composebasics.widget.ColorTheme
+import com.ephelsa.github.composebasics.widget.LuminositySelector
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,51 +27,84 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.java.simpleName
     }
 
-    private val petList = mutableStateListOf(
-        "Dog 🐶",
-        "Cat 😸",
-        "Mouse 🐭",
-        "Rabbit 🐰"
+    private val colorThemes = listOf(
+        ColorTheme(GreenLightColors, GreenDarkColors, "Green"),
+        ColorTheme(BlueLightColors, BlueDarkColors, "Blue"),
+        ColorTheme(RedLightColor, RedDarkColor, "Red")
     )
+
+    var currentColorTheme by mutableStateOf(GreenLightColors)
+    var currentlyIsDark by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PetList(header = "Beauty pets", petList = petList) {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            MaterialTheme(
+                colors = currentColorTheme
+            ) {
+                AppContent(
+                    colorThemes = colorThemes,
+                    isDark = currentlyIsDark,
+                    onColorSelected = { currentColorTheme = it },
+                    onLuminositySelected = { currentlyIsDark = it }
+                )
             }
         }
-
-        GlobalScope.launch {
-            updatePetList()
-        }
-    }
-
-    private suspend fun updatePetList() {
-        delay(2000)
-        petList.add("Fox 🦊")
     }
 }
 
 @Composable
-fun PetList(
-    header: String,
-    petList: List<String>,
-    onSelected: (String) -> Unit
+fun ThemeBar(
+    colorThemes: List<ColorTheme>,
+    isDark: Boolean,
+    onColorSelected: (Colors) -> Unit,
+    onLuminositySelected: (Boolean) -> Unit
 ) {
-    Column {
-        Text(text = header)
-        Spacer(modifier = Modifier.height(20.dp))
-        LazyColumnFor(items = petList) { pet ->
-            PetItem(pet = pet, onClick = onSelected)
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalGravity = Alignment.CenterVertically
+        ) {
+            Column {
+                ColorSelector(
+                    colorThemes = colorThemes,
+                    onSelected = onColorSelected,
+                    darkTheme = isDark
+                )
+            }
+
+            Column {
+                LuminositySelector {
+                    onLuminositySelected(it)
+                }
+            }
         }
     }
 }
 
+
 @Composable
-fun PetItem(pet: String, onClick: (String) -> Unit) {
-    Text(
-        text = pet,
-        modifier = Modifier.clickable(onClick = { onClick(pet) })
-    )
+fun AppContent(
+    colorThemes: List<ColorTheme>,
+    onColorSelected: (Colors) -> Unit,
+    isDark: Boolean,
+    onLuminositySelected: (Boolean) -> Unit
+) {
+    Scaffold(
+        topBar = { ThemeBar(colorThemes, isDark, onColorSelected, onLuminositySelected) },
+        bottomBar = {
+            Button(onClick = { }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Super Button")
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp)
+        ) {
+            Image(asset = imageResource(id = R.drawable.mercury))
+            Text(text = "Freddie Mercury")
+        }
+    }
 }
