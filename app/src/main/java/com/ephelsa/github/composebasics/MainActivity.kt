@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private val artists = listOf<Artist>(
         Artist(R.drawable.shakira, "Shakira", "Pop", "Waka, Waka, Eh, eh...!"),
         Artist(R.drawable.mercury, "Freddie Mercury", "Rock", "Eooooooooo!"),
-        Artist(R.drawable.avicii, "Avicii", "Electronic", "Wake me up")
+        Artist(R.drawable.avicii, "Avicii", "Electronic", "Wake me up!")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
